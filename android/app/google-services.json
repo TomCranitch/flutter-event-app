@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "479190946187",
+    "firebase_url": "https://event-app-12409.firebaseio.com",
+    "project_id": "event-app-12409",
+    "storage_bucket": "event-app-12409.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479190946187:android:0caaf25583b75716",
+        "android_client_info": {
+          "package_name": "au.com.cranitch.fluttereventapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479190946187-jpr132ervtg91r1f1hknq8j7h1mmdt81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-o9E9HPWMXTkmhGdGf51xKcpvof-TH5c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
