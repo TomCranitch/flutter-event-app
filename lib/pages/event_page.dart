@@ -1,9 +1,6 @@
-//TODO: Hero animation
-
 import 'package:flutter/material.dart';
 import 'package:flutter_event_app/pages/event_page_tabs/event_main_tab.dart';
 import 'package:flutter_event_app/pages/event_page_tabs/event_guests_tab.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_page_tabs/event_music_tab.dart';
 import 'scan_barcode_page.dart';
 

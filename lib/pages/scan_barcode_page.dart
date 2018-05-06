@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../utils/ticket_status_enum.dart';
 
 class ScanBarcodePage extends StatefulWidget {
 
@@ -17,14 +18,14 @@ class ScanBarcodePage extends StatefulWidget {
 
 class ScanBarcodePageState extends State<ScanBarcodePage>{
 
-  List<List> scannedTickets = []; //[Name, Status, Pass] TODO: Make class
+  List<List> scannedTickets = []; //[Name, Status, Pass]
 
   void checkTicket (String qrContent) async {
     List<String> qrContentArray = qrContent.split(",");
     print("Event ID: " + widget._eventId);
     if(qrContentArray[0] != widget._eventId) {
       this.setState(() {
-        scannedTickets.add(["Ticket Lookup Failed", "This ticket is for a different event", false]);
+        scannedTickets.add(["Ticket Lookup Failed", "This ticket is for a different event", TicketStatus.Unverified]);
 
       });
       // ignore: return_without_value
@@ -35,18 +36,18 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
         String name = userSnapshot.data["FirstName"] + " " + userSnapshot.data["LastName"];
         this.setState(() {
           if(qrContentArray[2] == attendeeSnapshot.data["EntryCode"] && attendeeSnapshot.data["Entered"] == false){
-            scannedTickets.add([name, "Ticket Verified", true]);
+            scannedTickets.add([name, "Ticket Verified", TicketStatus.Verified]);
             Firestore.instance.document("events/" + qrContentArray[0] + "/attendees/" + qrContentArray[1]).updateData({"Entered": true});
             // TODO: set Entered to true
           } else if(qrContentArray[2] == attendeeSnapshot.data["EntryCode"] && attendeeSnapshot.data["Entered"] == true){
-            scannedTickets.add([name, "Ticket Verification Failed: Guest has already entered", false]);
+            scannedTickets.add([name, "Ticket Verification Failed: Guest has already entered", TicketStatus.Unverified]);
           } else {
-            scannedTickets.add([name, "Ticket Verification Failed: Invalid Ticket", false]);
+            scannedTickets.add([name, "Ticket Verification Failed: Invalid Ticket", TicketStatus.Unverified]);
           }
         });
       }).catchError((Error error) {
         this.setState(() {
-          scannedTickets.add(["Ticket Lookup Failed", "The user doesn't exist or cannot attend this event", false]);
+          scannedTickets.add(["Ticket Lookup Failed", "The user doesn't exist or cannot attend this event", TicketStatus.Unverified]);
 
         });
         print(error);
@@ -74,12 +75,12 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
                   index = scannedTickets.length - index -  1;
                   return new Card(
                     child: new ListTile(
-                      leading: scannedTickets[index][2]
+                      leading: scannedTickets[index][2] == TicketStatus.Verified
                           ? const Icon(Icons.check, color: Colors.greenAccent,) : const Icon(Icons.clear, color: Colors.white),
                       title: new Text(scannedTickets[index][0]),
                       subtitle: new Text(scannedTickets[index][1]),
                     ),
-                    color: scannedTickets[index][2] ? Colors.white : scannedTickets[index][1] == 1 ? Colors.orangeAccent : Colors.redAccent,
+                    color: scannedTickets[index][2] == TicketStatus.Verified ? Colors.white : scannedTickets[index][2] == TicketStatus.ScanFailed ? Colors.orangeAccent : Colors.redAccent,
                   );
                 }
               ),
@@ -97,15 +98,15 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          this.scannedTickets.add(['Unable to access the camera.', 1]);
+          this.scannedTickets.add(['Scan Failed', 'Unable to access the camera.', TicketStatus.ScanFailed]);
         });
       } else {
-        setState(() => this.scannedTickets.add(['Unknown error: $e', 1]));
+        setState(() => this.scannedTickets.add(['Scan Failed', 'Unknown error: $e', TicketStatus.ScanFailed]));
       }
     } on FormatException{
-      setState(() => this.scannedTickets.add(['Exited scanning before scanning a ticket', 1]));
+      setState(() => this.scannedTickets.add(['Scan Failed', 'Exited scanning before scanning a ticket', TicketStatus.ScanFailed]));
     } catch (e) {
-      setState(() => this.scannedTickets.add(['Unknown error: $e', 1]));
+      setState(() => this.scannedTickets.add(['Scan Failed', 'Unknown error: $e', TicketStatus.ScanFailed]));
     }
   }
 
