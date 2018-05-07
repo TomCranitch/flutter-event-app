@@ -46,8 +46,7 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
         });
       }).catchError((Error error) {
         this.setState(() {
-          scannedTickets.add(["Ticket Lookup Failed", "The user doesn't exist or cannot attend this event", TicketStatus.Unverified]);
-
+          this.setState(() => scannedTickets.add(["Ticket Lookup Failed", "The user doesn't exist or cannot attend this event", TicketStatus.Unverified]));
         });
         print(error);
       });

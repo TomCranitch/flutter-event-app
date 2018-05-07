@@ -29,7 +29,7 @@ class EventCardController extends State<EventCard> {
             new ListTile(
               leading: const Icon(Icons.check, color: Colors.greenAccent,),
               title: new Text(widget._name),
-              subtitle: new Text(widget._description),
+              subtitle: new Text(widget._description.length < 35 ? widget._description : widget._description.substring(0, 30) + "..."),
             ),
             /*new ButtonTheme.bar( // make buttons use the appropriate styles for cards
               child: new ButtonBar(

@@ -14,16 +14,14 @@ class EventMainTabPage extends StatefulWidget {
   EventMainTabPage(this._eventId);
   String _address;
 
-  bool _qrReady = false;
-  String _qrEntryCode = "null";
-
-  final String description = "Very Very Brief"; //"Lorem ipsum dolor amet butcher snackwave hexagon pabst wayfarers taxidermy flexitarian man bun. Mixtape post-ironic raclette, art party cliche fingerstache DIY mustache vaporware thundercats air plant chicharrones celiac hammock photo booth. Etsy disrupt you probably haven't heard of them mumblecore sriracha jianbing. Godard keytar lomo chartreuse deep v drinking vinegar actually la croix marfa wolf subway tile. Chia live-edge cold-pressed, kombucha offal godard disrupt VHS ethical cornhole tumblr post-ironic irony.";
-
 }
 
 class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerProviderStateMixin {
   bool fullScreenQR = false;
   DocumentSnapshot eventDocumentSnapshot;
+  bool _qrReady = false;
+  String _qrEntryCode = "null";
+
 
 
   @override
@@ -54,8 +52,8 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.document("events/" + widget._eventId + "/attendees/" + user.uid).snapshots.listen((DocumentSnapshot attendeeSnapshot) {
       this.setState(() {
-        widget._qrEntryCode = attendeeSnapshot.data["EntryCode"];
-        widget._qrReady = true;
+        _qrEntryCode = attendeeSnapshot.data["EntryCode"];
+        _qrReady = true;
       });
     });
 
@@ -93,8 +91,8 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
                     onTap: () {
                       this.setState(() => fullScreenQR = !fullScreenQR);
                     },
-                    child: widget._qrReady ? new QrImage(
-                      data: widget._qrEntryCode,
+                    child: _qrReady ? new QrImage(
+                      data: _qrEntryCode,
                       version: 5, foregroundColor: Colors.green[900],
                       size: MediaQuery.of(context).size.width/2.5,
                     ) :
@@ -105,7 +103,7 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
             ),
             new Padding(
               padding: const EdgeInsets.all(10.0),
-              child: new Text(widget.description, textAlign: TextAlign.justify,),
+              child: new Text(eventDocumentSnapshot.data["description"], textAlign: TextAlign.justify,),
             ),
           ],
         ),
@@ -116,7 +114,7 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
             color: Colors.white.withOpacity(1.0),
             alignment: Alignment.center,
             child: new QrImage(
-              data: widget._qrEntryCode,
+              data: _qrEntryCode,
               version: 5, foregroundColor: Colors.black,
               size: MediaQuery.of(context).size.width,
               padding: new EdgeInsets.all(30.0),

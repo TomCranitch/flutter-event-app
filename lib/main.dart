@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       title: 'Event App',
       home: new SignInPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
