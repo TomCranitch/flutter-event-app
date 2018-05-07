@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventMusicSearchPage extends StatefulWidget {
   String _searchString;
+  String _accessToken;
   final String _eventID;
 
   EventMusicSearchPage(this._searchString, this._eventID);
@@ -17,23 +18,35 @@ class EventMusicSearchPage extends StatefulWidget {
 }
 
 class EventMusicSearchPageState extends State<EventMusicSearchPage>{
-  String _spotifyAccessToken = "BQCVNnU7xRTdVmG2bNEVmG5l0iUfMI_PYvK92xj7Ee8XKCUUHnJQ0FnMZAtePet2n4R86PcjU5T6wY6dre9_3toHRsy0bwmvMoIRKZrvHnAr1xMOo7kUdYLVqBdFJZIturCvWI8yI7rWhkXHEMuLguxC0EAuBS4BldAnfvnwxO4_kwWLmwJFLUKMUwIL";
   List _data;
 
 
   @override
   void initState () {
     super.initState();
+    getAccessToken();
     querySpotify(widget._searchString);
   }
 
+  getAccessToken() async {
+    Firestore.instance.document("events/" + widget._eventID).snapshots.listen((DocumentSnapshot docSnapshot) {
+      this.setState(() {
+        widget._accessToken = docSnapshot.data["access-token"];
+      });
+    });
+  }
+
   querySpotify(String query) async {
+    if(widget._accessToken == "") {
+      _data = null;
+      return;
+    }
     query = "https://api.spotify.com/v1/search?q=" + query.replaceAll(new RegExp("\s+"), "%20") + "&type=track";
 
     var response = await http.get(
       Uri.encodeFull(query),
       headers: {
-        "Authorization": "Bearer " + _spotifyAccessToken
+        "Authorization": "Bearer " + widget._accessToken
       }
     );
     this.setState(() {
@@ -72,8 +85,6 @@ class EventMusicSearchPageState extends State<EventMusicSearchPage>{
                 },
               ),
             )
-            //new MusicCard("https://marketplace.canva.com/MAB6qNBAV-0/1/0/thumbnail_large/canva-in-too-deep-diving-music-album-cover-MAB6qNBAV-0.jpg", "In Too Deep", "The Naked Heros", true),
-            //new MusicCard("http://payload368.cargocollective.com/1/4/158872/9666476/Tame-Impala-Currents-final-packshot-1200px_800.jpg", "The Less You Know the Better", "Tame Impala", false),
           ],
         ),
       ),
@@ -91,10 +102,10 @@ class EventMusicSearchPageState extends State<EventMusicSearchPage>{
           "name": _data[index]["name"],
           "artist": _data[index]["artists"][0]["name"],
           "cover":  _data[index]["album"]["images"][0]["url"],
-          //TODO:
     });
 
-    print(_data[index]["uri"]);
+    // TODO: add user vote
+
     this.setState(() => _data.removeAt(index));
   }
 

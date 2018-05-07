@@ -52,12 +52,10 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
 
   void getEntryCode () async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    print(user.uid);
     Firestore.instance.document("events/" + widget._eventId + "/attendees/" + user.uid).snapshots.listen((DocumentSnapshot attendeeSnapshot) {
       this.setState(() {
         widget._qrEntryCode = attendeeSnapshot.data["EntryCode"];
         widget._qrReady = true;
-        print(widget._qrEntryCode);
       });
     });
 

@@ -29,10 +29,7 @@ class SignInPage extends StatelessWidget {
           idToken: googleAuth.idToken,
           accessToken: googleAuth.accessToken
       );
-      print(user);
     }
-
-    print(await _auth.currentUser());
 
     if (await _auth.currentUser() != null)
       Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HomePage()));

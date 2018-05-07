@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Event App',
-      home: new SignInPage() //new HomePage(),//new siginPage()//new HomePage(),
+      home: new SignInPage(),
     );
   }
 }

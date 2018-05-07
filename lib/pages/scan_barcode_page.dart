@@ -22,7 +22,6 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
 
   void checkTicket (String qrContent) async {
     List<String> qrContentArray = qrContent.split(",");
-    print("Event ID: " + widget._eventId);
     if(qrContentArray[0] != widget._eventId) {
       this.setState(() {
         scannedTickets.add(["Ticket Lookup Failed", "This ticket is for a different event", TicketStatus.Unverified]);
