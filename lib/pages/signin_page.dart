@@ -11,6 +11,7 @@ final GoogleSignIn _googleSignIn = new GoogleSignIn();
 
 class SignInPage extends StatelessWidget {
 
+  ///Logs in the current user and then navigates to the home page when successful
   Future<Null> _ensureLoggedInWithGoogle(BuildContext context) async {
     GoogleSignInAccount googleUser = _googleSignIn.currentUser;
 

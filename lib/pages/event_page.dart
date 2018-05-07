@@ -39,6 +39,8 @@ class EventPageState extends State<EventPage> with SingleTickerProviderStateMixi
     super.dispose();
   }
 
+  ///Queries the Firestore to see if the current user can can tickets.
+  ///Displays the scan ticket button if appropriate
   void canScan() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.document("events/" + widget._eventID + "/administrators/" + user.uid).snapshots.listen((DocumentSnapshot administratorsSnapshot) {

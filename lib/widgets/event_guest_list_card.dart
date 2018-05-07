@@ -20,6 +20,7 @@ class EventGuestListCardState extends State<EventGuestListCard> {
     getGuestUserData();
   }
 
+  ///Gets a list of guests from the database
   void getGuestUserData() {
     Firestore.instance.collection('users').document(widget._guestUserID).get()
         .then((DocumentSnapshot userDocument) {

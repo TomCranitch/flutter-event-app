@@ -13,6 +13,8 @@ class CalendarPicker extends StatefulWidget {
 class CalendarPickerState extends State<CalendarPicker> {
   static String _timeFormat = "EEE, MMM d, yyyy 'at' h:mm a";
 
+  /// A date picket is first displayed, and then a time picker. The resulting
+  /// date and time are then formatted and passed to the [_controller]
   void dateTimePicker() async {
 
     final DateTime date = await showDatePicker(
@@ -36,6 +38,7 @@ class CalendarPickerState extends State<CalendarPicker> {
     this.setState(() => widget._controller.text =  DateFormat(_timeFormat).format(dateAndTime));
   }
 
+  ///Converts a given [dateString] in the correct format to a date. Otherwise returns null
   static DateTime stringToDate(String dateString) {
     try {
       return DateFormat(_timeFormat).parseStrict(dateString);
@@ -43,7 +46,8 @@ class CalendarPickerState extends State<CalendarPicker> {
       return null;
     }
   }
-  
+
+  ///Converts a given [timeString] in the correct format to a date. Otherwise returns null
   static TimeOfDay stringToTime(String timeString) {
     try {
       return TimeOfDay.fromDateTime(DateFormat(_timeFormat).parseStrict(timeString));
@@ -52,6 +56,7 @@ class CalendarPickerState extends State<CalendarPicker> {
     }
   }
 
+  ///Validates that the given date is in the correct format
   bool dateValidator (String date) {
     if (date.isEmpty) return true;
     return stringToDate(date) == null;

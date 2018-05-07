@@ -9,11 +9,10 @@ class EventGuestPage extends StatefulWidget {
 
   final String _eventID;
   EventGuestPage(this._eventID);
-
-  //final List<User> attendees = [new User("Tom", "Cranitch"), new User("User", "Two")];
 }
 
 class EventGuestPageState extends State<EventGuestPage> {
+
   @override
   Widget build(BuildContext context) {
     return new Padding(
@@ -23,37 +22,25 @@ class EventGuestPageState extends State<EventGuestPage> {
         children: <Widget>[
           new Expanded(
             child: new StreamBuilder<QuerySnapshot>(
+
+              // Gets all attendees in the current event
               stream: Firestore.instance
                   .collection('events').document(widget._eventID)
                   .getCollection('attendees')
                   .snapshots,
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) return new Text("Loading...");
-                //return new Text("hello");
                 return new ListView(
                   children: snapshot.data.documents.map((DocumentSnapshot document) {
                     return new EventGuestListCard(document.documentID, document.data["Going"]);
-                    //new Text(document.documentID);
                   }).toList(),
                 );
               },
             ),
-
-            /*new ListView.builder(
-              itemCount: widget.attendees.length,
-              itemBuilder: (BuildContext context, int index) {
-                return new Card(
-                  child: new ListTile(
-                    leading: const Icon(Icons.check, color: Colors.greenAccent,),
-                    title: new Text(widget.attendees[index].firstName),
-                    subtitle: new Text(widget.attendees[index].lastName),
-                  ),
-                );
-              },
-            )*/
           )
         ]
       )
     );
   }
+
 }

@@ -31,20 +31,6 @@ class EventCardController extends State<EventCard> {
               title: new Text(widget._name),
               subtitle: new Text(widget._description.length < 35 ? widget._description : widget._description.substring(0, 30) + "..."),
             ),
-            /*new ButtonTheme.bar( // make buttons use the appropriate styles for cards
-              child: new ButtonBar(
-                children: <Widget>[
-                  new FlatButton(
-                    child: const Text('RSVP'),
-                    onPressed: () { /* ... */ },
-                  ),
-                  new FlatButton(
-                    child: const Text('View Ticket'),
-                    onPressed: () { /* ... */ },
-                  ),
-                ],
-              ),
-            ),*/
           ],
         )
       )

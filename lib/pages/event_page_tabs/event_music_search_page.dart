@@ -28,6 +28,7 @@ class EventMusicSearchPageState extends State<EventMusicSearchPage>{
     querySpotify(widget._searchString);
   }
 
+  ///Queries the Firestore for the Spotify Access Tocken
   getAccessToken() async {
     Firestore.instance.document("events/" + widget._eventID).snapshots.listen((DocumentSnapshot docSnapshot) {
       this.setState(() {
@@ -36,6 +37,7 @@ class EventMusicSearchPageState extends State<EventMusicSearchPage>{
     });
   }
 
+  ///Searches Spotify based on the [query]
   querySpotify(String query) async {
     if(widget._accessToken == "") {
       _data = null;
@@ -52,6 +54,26 @@ class EventMusicSearchPageState extends State<EventMusicSearchPage>{
     this.setState(() {
       _data = JSON.decode(response.body)["tracks"]["items"];
     });
+  }
+
+  ///Queries Spotify with the [content] when the search field is submitted
+  void onSubmit(String content) {
+    querySpotify(content);
+  }
+
+  ///Votes for song when the song at the specified [index] is tapped
+  void onSongTap (int index) async {
+    Firestore.instance.collection("events").document(widget._eventID).getCollection("music")
+        .document(_data[index]["uri"]).setData(<String, dynamic>{
+      "played": false,
+      "name": _data[index]["name"],
+      "artist": _data[index]["artists"][0]["name"],
+      "cover":  _data[index]["album"]["images"][0]["url"],
+    });
+
+    // TODO: add user vote
+
+    this.setState(() => _data.removeAt(index));
   }
 
   @override
@@ -90,25 +112,6 @@ class EventMusicSearchPageState extends State<EventMusicSearchPage>{
       ),
     );
   }
-
-  void onSubmit(String content) {
-    querySpotify(content);
-  }
-  
-  void onSongTap (int index) async {
-    Firestore.instance.collection("events").document(widget._eventID).getCollection("music")
-        .document(_data[index]["uri"]).setData(<String, dynamic>{
-          "played": false,
-          "name": _data[index]["name"],
-          "artist": _data[index]["artists"][0]["name"],
-          "cover":  _data[index]["album"]["images"][0]["url"],
-    });
-
-    // TODO: add user vote
-
-    this.setState(() => _data.removeAt(index));
-  }
-
 
 }
 

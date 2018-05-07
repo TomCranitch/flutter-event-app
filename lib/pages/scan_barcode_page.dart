@@ -20,6 +20,13 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
 
   List<List> scannedTickets = []; //[Name, Status, Pass]
 
+  ///Validates the ticket with [qrContent] against the database
+  ///
+  /// The ticket is first checked to verify that it is for the correct event.
+  /// It is then confirmed that the user can is registered to attend the current event.
+  /// Finally, the program checks that the entry code is valid and that the
+  /// guest has not already entered. If not all conditions are satisfied then
+  /// an appropriate error message is given.
   void checkTicket (String qrContent) async {
     List<String> qrContentArray = qrContent.split(",");
     if(qrContentArray[0] != widget._eventId) {
@@ -27,8 +34,7 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
         scannedTickets.add(["Ticket Lookup Failed", "This ticket is for a different event", TicketStatus.Unverified]);
 
       });
-      // ignore: return_without_value
-      return;
+      return; // ignore: return_without_value
     }
     Firestore.instance.document("events/" + qrContentArray[0] + "/attendees/" + qrContentArray[1]).get().then((DocumentSnapshot attendeeSnapshot) {
       Firestore.instance.document("users/" + qrContentArray[1]).get().then((DocumentSnapshot userSnapshot) {

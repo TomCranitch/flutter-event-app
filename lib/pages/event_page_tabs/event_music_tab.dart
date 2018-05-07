@@ -14,6 +14,22 @@ class EventMusicPage extends StatefulWidget {
 class EventMusicPageState extends State<EventMusicPage>{
   Color background = Colors.white; // TODO: very, very hacky. only for brief testing
 
+  void onSubmit(BuildContext context, String content) {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new EventMusicSearchPage(content, widget._eventID)));
+  }
+
+  ///Adds the song with [musicID] to the playlist when tapped
+  void onMusicTap(String musicID) {
+    background = Colors.greenAccent;
+    Firestore.instance
+        .collection('events').document(widget._eventID)
+        .getCollection('music').document(musicID)
+        .getCollection('votes').document() //User ID
+        .setData(<String, dynamic> {
+      //TODO: 'user'
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Padding(
@@ -53,19 +69,5 @@ class EventMusicPageState extends State<EventMusicPage>{
     );
   }
 
-  void onSubmit(BuildContext context, String content) {
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new EventMusicSearchPage(content, widget._eventID)));
-  }
-
-  void onMusicTap(String musicID) {
-    background = Colors.greenAccent;
-    Firestore.instance
-        .collection('events').document(widget._eventID)
-        .getCollection('music').document(musicID)
-        .getCollection('votes').document() //User ID
-        .setData(<String, dynamic> {
-          //TODO: 'user'
-    });
-  }
 }
 

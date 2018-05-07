@@ -31,6 +31,9 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
     getEntryCode();
   }
 
+
+  ///Queries OpenStreetMap using the latitude and longitude given in the [location].
+  ///The resulting address is then displayed using setState.
   void setAddress(GeoPoint location) async {
     String query =  "https://nominatim.openstreetmap.org/reverse?format=json&lat="+ location.latitude.toString() + "&lon=" + location.longitude.toString();
 
@@ -41,6 +44,7 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
     this.setState(() => widget._address = JSON.decode(response.body)["display_name"]);
   }
 
+  ///Gets the document snapshot of the event with [eventID] and updates the address appropriately
   void getEventData (String eventID) async {
     Firestore.instance.collection("events").document(eventID).snapshots.listen((DocumentSnapshot eventSnapshot) {
       this.setState(() => eventDocumentSnapshot = eventSnapshot);
@@ -48,6 +52,7 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
     });
   }
 
+  ///Gets the unique ticketing entry code of the current user
   void getEntryCode () async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.document("events/" + widget._eventId + "/attendees/" + user.uid).snapshots.listen((DocumentSnapshot attendeeSnapshot) {
@@ -76,6 +81,8 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
               child: new Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
+                  //Column with the event title and address
                   new Expanded(
                     child: new Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -87,6 +94,8 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
                       ],
                     ),
                   ),
+
+                  //Entry QR Code
                   fullScreenQR ? new Container() : new InkWell(
                     onTap: () {
                       this.setState(() => fullScreenQR = !fullScreenQR);
@@ -107,6 +116,8 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
             ),
           ],
         ),
+
+        // If set to display a full screen QR Code, the QR code goes full screen
         fullScreenQR ? new InkWell(
           splashColor: Colors.greenAccent,
           onTap: () => this.setState(() => fullScreenQR = !fullScreenQR),

@@ -11,6 +11,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
+  ///Navigates to the Add Event Page
   void addEvent() {
     Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new AddEventPage()));
   }
@@ -25,6 +26,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin{
       ),
       body: new Material(
         color: Colors.deepPurpleAccent,
+
+        // Get all events ordered by start time
         child: new StreamBuilder<QuerySnapshot>(
           stream: Firestore.instance
               .collection('events')

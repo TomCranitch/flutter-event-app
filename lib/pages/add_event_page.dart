@@ -19,6 +19,11 @@ class AddEventPageState extends State<AddEventPage> {
   final TextEditingController _startTimeController = new TextEditingController();
   final TextEditingController _endTimeController = new TextEditingController();
 
+  ///Submits the form
+  ///
+  /// The form fields are first validated, and then the event is added to the
+  /// database. The current user is then added to the Administrator collection
+  /// of the event with all privileges enabled.
   void submitForm () async {
     final FormState form = _formKey.currentState;
 
