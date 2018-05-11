@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/event_page.dart';
+import '../utils/colours.dart';
 
 class EventCard extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class EventCardController extends State<EventCard> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             new ListTile(
-              leading: const Icon(Icons.check, color: Colors.greenAccent,),
+              leading: const Icon(Icons.check, color: AppColours.tick,),
               title: new Text(widget._name),
               subtitle: new Text(widget._description.length < 35 ? widget._description : widget._description.substring(0, 30) + "..."),
             ),

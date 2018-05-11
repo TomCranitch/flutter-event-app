@@ -32,6 +32,9 @@ class SignInPage extends StatelessWidget {
       );
     }
 
+    print(googleUser);
+    print(await _auth.currentUser());
+
     if (await _auth.currentUser() != null)
       Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HomePage()));
   }

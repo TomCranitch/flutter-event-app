@@ -64,35 +64,49 @@ class AddEventPageState extends State<AddEventPage> {
         child: new Padding(
           padding: const EdgeInsets.all(8.0),
           child: new Form(
-            autovalidate: true,
+            //autovalidate: true,
             key: _formKey,
             child: new Column(
               children: <Widget>[
-                new TextFormField(
-                  decoration: new InputDecoration(labelText: "Event Name"),
-                  validator: (val) => val.length < 5 ? "Event name is too short" : null,
-                  onSaved: (val) => _eventName = val,
+                new Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: new TextFormField(
+                    decoration: new InputDecoration(
+                        labelText: "Event Name",
+                      border: new OutlineInputBorder(),
+                    ),
+                    validator: (val) => val.length < 5 ? "Event name is too short" : null,
+                    onSaved: (val) => _eventName = val,
+                  ),
                 ),
                 new TextFormField(
-                  decoration: new InputDecoration(labelText: "Description"),
+                  decoration: new InputDecoration(
+                      labelText: "Description",
+                      border: new OutlineInputBorder(),
+                  ),
                   validator: (val) => val.isEmpty ? "Event description should not be empty" : null,
                   maxLines: 6,
                   onSaved: (val) => _description = val,
                 ),
                 new CalendarPicker(_startTimeController),
                 new CalendarPicker(_endTimeController),
-                new TextFormField(
-                  decoration: new InputDecoration(
-                    labelText: "Lattitude",
-                    icon: new Icon(Icons.map)
+                new Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: new TextFormField(
+                    decoration: new InputDecoration(
+                      labelText: "Lattitude",
+                      //icon: new Icon(Icons.map),
+                      border: new OutlineInputBorder(),
+                    ),
+                    validator: (val) => double.parse(val, (e) => null) == null ? "Invalid longitude. Should be number." : null,
+                    onSaved: (val) => _latitude = double.parse(val, (e) => null),
                   ),
-                  validator: (val) => double.parse(val, (e) => null) == null ? "Invalid longitude. Should be number." : null,
-                  onSaved: (val) => _latitude = double.parse(val, (e) => null),
                 ),
                 new TextFormField(
                   decoration: new InputDecoration(
                     labelText: "Longitude",
-                    icon: new Icon(Icons.map)
+                    //icon: new Icon(Icons.map),
+                    border: new OutlineInputBorder(),
                   ),
                   validator: (val) => double.parse(val, (e) => null) == null ? "Invalid longitude. Should be number." : null,
                   onSaved: (val) => _longitude = double.parse(val, (e) => null),

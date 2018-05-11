@@ -3,6 +3,7 @@ import '../widgets/event_list_card.dart';
 import 'event_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_event_page.dart';
+import '../utils/colours.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,11 +22,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin{
     return new Scaffold(
       floatingActionButton: new FloatingActionButton(
         onPressed: () => addEvent(),
-        backgroundColor: Colors.amberAccent,
+        //backgroundColor: Colors.amberAccent,
         child: new Icon(Icons.add),
       ),
       body: new Material(
-        color: Colors.deepPurpleAccent,
+        color: AppColours.primaryCharcoalDark,
 
         // Get all events ordered by start time
         child: new StreamBuilder<QuerySnapshot>(

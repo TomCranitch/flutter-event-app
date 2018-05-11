@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/ticket_status_enum.dart';
+import '../utils/colours.dart';
 
 class ScanBarcodePage extends StatefulWidget {
 
@@ -62,6 +63,7 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
 
   Widget build(BuildContext context) {
     return new Material(
+      color: AppColours.background,
       child: new Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15.0),
         child: new Column(
@@ -84,7 +86,7 @@ class ScanBarcodePageState extends State<ScanBarcodePage>{
                       title: new Text(scannedTickets[index][0]),
                       subtitle: new Text(scannedTickets[index][1]),
                     ),
-                    color: scannedTickets[index][2] == TicketStatus.Verified ? Colors.white : scannedTickets[index][2] == TicketStatus.ScanFailed ? Colors.orangeAccent : Colors.redAccent,
+                    color: scannedTickets[index][2] == TicketStatus.Verified ? Colors.white : scannedTickets[index][2] == TicketStatus.ScanFailed ? AppColours.warning : AppColours.error,
                   );
                 }
               ),

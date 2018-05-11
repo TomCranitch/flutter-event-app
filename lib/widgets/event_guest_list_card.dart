@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../utils/colours.dart';
 
 class EventGuestListCard extends StatefulWidget {
   State<StatefulWidget> createState() => new EventGuestListCardState();
@@ -43,7 +44,7 @@ class EventGuestListCardState extends State<EventGuestListCard> {
     ) :
     new Card(
       child: new ListTile(
-        leading: widget._going ? const Icon(Icons.check, color: Colors.greenAccent,) : const Icon(Icons.clear, color: Colors.redAccent,),
+        leading: widget._going ? const Icon(Icons.check, color: AppColours.tick,) : const Icon(Icons.clear, color: AppColours.error,),
         title: new Text(_fName),
         subtitle: new Text(_lName),
       ),

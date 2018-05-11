@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/event_music_list_card.dart';
 import 'event_music_search_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../utils/colours.dart';
 
 class EventMusicPage extends StatefulWidget {
   final String _eventID;
@@ -20,7 +21,7 @@ class EventMusicPageState extends State<EventMusicPage>{
 
   ///Adds the song with [musicID] to the playlist when tapped
   void onMusicTap(String musicID) {
-    background = Colors.greenAccent;
+    background = AppColours.tick;
     Firestore.instance
         .collection('events').document(widget._eventID)
         .getCollection('music').document(musicID)

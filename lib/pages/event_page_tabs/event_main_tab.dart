@@ -4,6 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../utils/colours.dart';
 
 
 class EventMainTabPage extends StatefulWidget {
@@ -102,7 +103,7 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
                     },
                     child: _qrReady ? new QrImage(
                       data: _qrEntryCode,
-                      version: 5, foregroundColor: Colors.green[900],
+                      version: 5, foregroundColor: AppColours.primaryCharcoal,
                       size: MediaQuery.of(context).size.width/2.5,
                     ) :
                     new Text("Loading entry QR code..."),
@@ -119,7 +120,7 @@ class EventMainTabPageState extends State<EventMainTabPage> with SingleTickerPro
 
         // If set to display a full screen QR Code, the QR code goes full screen
         fullScreenQR ? new InkWell(
-          splashColor: Colors.greenAccent,
+          splashColor: AppColours.tick,
           onTap: () => this.setState(() => fullScreenQR = !fullScreenQR),
           child: new Container(
             color: Colors.white.withOpacity(1.0),

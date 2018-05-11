@@ -23,9 +23,7 @@ class EventPage extends StatefulWidget{
 }
 
 class EventPageState extends State<EventPage> with SingleTickerProviderStateMixin {
-
   TabController controller;
-
 
   @override
   void initState() {
@@ -58,7 +56,6 @@ class EventPageState extends State<EventPage> with SingleTickerProviderStateMixi
         floatingActionButton: widget._canScan ? new FloatingActionButton(
           onPressed: () => widget.fabOnPress(context),
           child: new Icon(Icons.camera_alt),
-          backgroundColor: Colors.cyanAccent,
         ) : new Container(),
         body: new TabBarView(
             controller: controller,
@@ -69,7 +66,7 @@ class EventPageState extends State<EventPage> with SingleTickerProviderStateMixi
             ],
         ),
         bottomNavigationBar: new Material(
-          color: Colors.greenAccent,
+          //color: Colors.greenAccent,
           child: new TabBar(
             controller: controller,
             tabs: <Tab>[
