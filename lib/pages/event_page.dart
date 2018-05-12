@@ -5,6 +5,9 @@ import 'event_page_tabs/event_music_tab.dart';
 import 'scan_barcode_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_fab_dialer/flutter_fab_dialer.dart';
+import '../utils/colours.dart';
+import 'edit_event_page.dart';
 
 class EventPage extends StatefulWidget{
   @override
@@ -12,6 +15,8 @@ class EventPage extends StatefulWidget{
 
   String _eventID;
   bool _canScan= false;
+  bool _canEdit = false;
+  bool _showFAB = false;
 
   EventPage(this._eventID);
 
@@ -24,12 +29,42 @@ class EventPage extends StatefulWidget{
 
 class EventPageState extends State<EventPage> with SingleTickerProviderStateMixin {
   TabController controller;
+  FabMiniMenuItem editFABItem;
+  FabMiniMenuItem scanFABItem;
+
+  List<FabMiniMenuItem> fabItems = [];
+
+  void _scanTickets () {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new ScanBarcodePage(widget._eventID)));
+  }
+
+  void _editEvent () {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new EventEditPage(widget._eventID)));
+  }
 
   @override
   void initState() {
     super.initState();
+
+    scanFABItem = new FabMiniMenuItem.noText(
+        new Icon(Icons.camera_alt),
+        AppColours.primaryCharcoalDark,
+        4.0,
+        "Scan Ticket",
+        _scanTickets
+    );
+
+    editFABItem = new FabMiniMenuItem.noText(
+        new Icon(Icons.edit),
+        AppColours.primaryCharcoalDark,
+        4.0,
+        "Edit Event",
+        _editEvent
+    );
+
+
     controller = new TabController(length: 3, vsync: this);
-    canScan();
+    adminPrivileges();
   }
   @override
   void dispose() {
@@ -39,11 +74,28 @@ class EventPageState extends State<EventPage> with SingleTickerProviderStateMixi
 
   ///Queries the Firestore to see if the current user can can tickets.
   ///Displays the scan ticket button if appropriate
-  void canScan() async {
+  void adminPrivileges() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.document("events/" + widget._eventID + "/administrators/" + user.uid).snapshots.listen((DocumentSnapshot administratorsSnapshot) {
       if(administratorsSnapshot.exists){
-        this.setState(() => widget._canScan = administratorsSnapshot.data["can-scan"]);
+        this.setState((){
+          widget._canScan = administratorsSnapshot.data["can-scan"];
+          widget._canEdit = administratorsSnapshot.data["can-edit-event"];
+
+          // TODO: fails if _canEdit or _canScan are null
+          if(widget._canEdit || widget._canScan) {
+            widget._showFAB = true;
+          } else {
+            widget._showFAB = false;
+          }
+
+          fabItems = [];
+
+          if(widget._canEdit) fabItems.add(editFABItem);
+          if(widget._canScan) fabItems.add(scanFABItem);
+
+
+        });
       }
     });
   }
@@ -53,10 +105,9 @@ class EventPageState extends State<EventPage> with SingleTickerProviderStateMixi
   Widget build(BuildContext context) {
     return new Material(
       child: new Scaffold(
-        floatingActionButton: widget._canScan ? new FloatingActionButton(
-          onPressed: () => widget.fabOnPress(context),
-          child: new Icon(Icons.camera_alt),
-        ) : new Container(),
+        // TODO: Currently using a package but its not great. Look at custom implementation
+        floatingActionButton: widget._showFAB ? new FabDialer(fabItems, AppColours.secondaryCyan, new Icon(Icons.add))
+        : new Container(),
         body: new TabBarView(
             controller: controller,
             children: <Widget>[
@@ -66,7 +117,6 @@ class EventPageState extends State<EventPage> with SingleTickerProviderStateMixi
             ],
         ),
         bottomNavigationBar: new Material(
-          //color: Colors.greenAccent,
           child: new TabBar(
             controller: controller,
             tabs: <Tab>[

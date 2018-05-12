@@ -11,7 +11,7 @@ class CalendarPicker extends StatefulWidget {
 }
 
 class CalendarPickerState extends State<CalendarPicker> {
-  static String _timeFormat = "EEE, MMM d, yyyy 'at' h:mm a";
+  static String timeFormat = "EEE, MMM d, yyyy 'at' h:mm a";
 
   /// A date picket is first displayed, and then a time picker. The resulting
   /// date and time are then formatted and passed to the [_controller]
@@ -35,13 +35,13 @@ class CalendarPickerState extends State<CalendarPicker> {
 
     DateTime dateAndTime = new DateTime(date.year, date.month, date.day, time.hour, time.minute);
 
-    this.setState(() => widget._controller.text =  DateFormat(_timeFormat).format(dateAndTime));
+    this.setState(() => widget._controller.text =  DateFormat(timeFormat).format(dateAndTime));
   }
 
   ///Converts a given [dateString] in the correct format to a date. Otherwise returns null
   static DateTime stringToDate(String dateString) {
     try {
-      return DateFormat(_timeFormat).parseStrict(dateString);
+      return DateFormat(timeFormat).parseStrict(dateString);
     } catch (e) {
       return null;
     }
@@ -50,7 +50,7 @@ class CalendarPickerState extends State<CalendarPicker> {
   ///Converts a given [timeString] in the correct format to a date. Otherwise returns null
   static TimeOfDay stringToTime(String timeString) {
     try {
-      return TimeOfDay.fromDateTime(DateFormat(_timeFormat).parseStrict(timeString));
+      return TimeOfDay.fromDateTime(DateFormat(timeFormat).parseStrict(timeString));
     } catch (e) {
       return null;
     }

@@ -15,6 +15,7 @@ dependencies:
   google_sign_in: "^2.1.2"
   firebase_auth: "^0.5.2"
   intl: "^0.15.6"
+  flutter_fab_dialer: "^0.0.5"
 
 dev_dependencies:
   flutter_test:
