@@ -1,3 +1,5 @@
 enum TicketStatus {
-  Verified, Unverified, ScanFailed
+  Verified,
+  AlreadyScanned, UnknownUser, InvalidEntryCode, DifferentEvent,
+  ExitedScan, ScanFailed, UnableToAccessCamera
 }
